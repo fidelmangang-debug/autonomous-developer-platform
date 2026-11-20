@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#101827">
+  <meta name="description" content="Upload a software project, build it, repair issues, and receive the finished application.">
+  <link rel="manifest" href="./manifest.webmanifest">
+  <title>Autonomous Developer</title>
+  <style>
+    :root{color-scheme:dark;--bg:#0b1220;--panel:#121d2e;--line:#26364d;--muted:#9aabc2;--text:#f4f7fb;--accent:#75a7ff;--good:#64d6a0}
+    *{box-sizing:border-box}body{margin:0;background:linear-gradient(160deg,#101d31,#0b1220 45%);color:var(--text);font:16px system-ui,-apple-system,Segoe UI,sans-serif;min-height:100vh}
+    main{width:min(760px,100%);margin:auto;padding:24px 18px 48px}.top{display:flex;align-items:center;gap:12px;margin:10px 0 30px}.logo{width:42px;height:42px;border-radius:13px;background:#203a61;display:grid;place-items:center;font-size:22px}.top small,.muted{color:var(--muted)}h1{font-size:clamp(28px,7vw,42px);line-height:1.1;margin:12px 0}p{line-height:1.55}.panel{background:rgba(18,29,46,.94);border:1px solid var(--line);border-radius:20px;padding:20px;margin:18px 0;box-shadow:0 14px 38px #0002}.eyebrow{text-transform:uppercase;letter-spacing:.12em;color:var(--accent);font-size:12px;font-weight:700}.drop{border:1.5px dashed #526986;border-radius:16px;padding:25px 14px;text-align:center;margin:16px 0;background:#0e1929}.drop input{max-width:100%;margin-top:14px;color:var(--muted)}button{width:100%;border:0;border-radius:14px;padding:16px;font-size:16px;font-weight:750;background:var(--accent);color:#071326;cursor:pointer}button:disabled{opacity:.45;cursor:not-allowed}.status{display:flex;align-items:center;gap:10px;padding:13px;border-radius:12px;background:#0d1929;border:1px solid var(--line)}.dot{width:9px;height:9px;border-radius:50%;background:var(--good)}.bar{height:8px;background:#26364d;border-radius:99px;overflow:hidden;margin:14px 0}.bar span{display:block;width:0;height:100%;background:var(--accent)}.notice{font-size:13px;color:var(--muted)}.nav{display:flex;gap:8px;flex-wrap:wrap;margin:18px 0}.nav span{border:1px solid var(--line);border-radius:99px;padding:8px 12px;color:var(--muted);font-size:13px}.hidden{display:none}footer{color:var(--muted);font-size:12px;text-align:center;margin-top:30px}
+  </style>
+</head>
+<body>
+<main>
+  <div class="top"><div class="logo">⚙</div><div><strong>Autonomous Developer</strong><br><small>Your project build workspace</small></div></div>
+  <div class="eyebrow">Upload · Build · Repair · Test</div>
+  <h1>Turn your project ZIP into an application.</h1>
+  <p class="muted">Upload your project and start a build. The platform will show its progress and any issues that need attention.</p>
+  <div class="nav"><span>Android apps</span><span>Websites</span><span>Backend projects</span><span>More project types</span></div>
+  <section class="panel">
+    <div class="eyebrow">New build</div>
+    <h2>Choose your project ZIP</h2>
+    <div class="drop"><div style="font-size:34px">📦</div><strong>Select a ZIP file</strong><br><span class="muted">Keep your original project safe</span><br><input id="zip" type="file" accept=".zip,application/zip"></div>
+    <div id="fileInfo" class="notice">No file selected.</div>
+    <button id="start" disabled>START BUILD</button>
+    <p class="notice">Build execution is not connected yet. This starter interface will not upload or execute files until the secure backend is installed.</p>
+  </section>
+  <section class="panel">
+    <div class="eyebrow">Build workspace</div><h2>Build progress</h2>
+    <div class="status"><span class="dot"></span><span id="state">Waiting for build service</span></div>
+    <div class="bar"><span id="progress"></span></div>
+    <p id="detail" class="muted">Your jobs and logs will appear here after the backend is connected.</p>
+    <div id="logs" class="notice"></div>
+  </section>
+  <section class="panel">
+    <div class="eyebrow">Next milestone</div><h2>Secure build engine</h2>
+    <p class="muted">The next development phase adds ZIP validation, isolated build workers, project detection, AI-assisted repairs, tests, and verified APK or web artifact delivery.</p>
+  </section>
+  <footer>Autonomous Developer Platform · Early development version</footer>
+</main>
+<script>
+const input=document.getElementById('zip'),start=document.getElementById('start'),info=document.getElementById('fileInfo');
+input.addEventListener('change',()=>{const f=input.files&&input.files[0];const valid=f&&f.name.toLowerCase().endsWith('.zip');start.disabled=!valid;info.textContent=f?(valid?f.name+' · '+(f.size/1024/1024).toFixed(2)+' MB':'Please select a .zip file.'):'No file selected.';});
+start.addEventListener('click',()=>{document.getElementById('state').textContent='Build service not connected';document.getElementById('detail').textContent='The interface is ready, but the secure API and build workers still need to be implemented. No file has been uploaded.';});
+if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));}
+</script>
+</body>
+</html>
